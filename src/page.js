@@ -1,4 +1,4 @@
-export default function ( Regular ) {
+export default function ( { Regular, fetch } ) {
   const Todo = Regular.extend( {
   	template: `
   		<li
@@ -30,6 +30,28 @@ export default function ( Regular ) {
   	config() {
   		this.data.editing = false
   	},
+    async init() {
+      const response = await fetch( {
+        url: '/',
+        method: 'get',
+      } )
+      const json = response.data || {}
+      if ( json.code === 0 ) {
+        Q.toast( {
+          position: 'top',
+          timeout: 2000,
+          type: 'info',
+          square: true,
+          message: '欢迎使用' + json.body.hello
+        } )
+      }
+      Q.toast( {
+        position: 'top',
+        timeout: 2000,
+        type: 'info',
+        message: '欢迎使用该应用'
+      } )
+    },
     json( v ) {
       return JSON.stringify( v )
     },
